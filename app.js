@@ -26,6 +26,7 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         const usersCollection = client.db("meal-mafia").collection("users");
+        const mealsCollection = client.db("meal-mafia").collection("meals");
 
 
         //save a user in database
@@ -56,6 +57,11 @@ async function run() {
 
             const result = await usersCollection.updateOne(query, updateDoc, options);
             res.send(result)
+        })
+
+        app.get("/meals", async (req, res) => {
+            const result = await mealsCollection.find().toArray();
+            res.send(result);
         })
 
         // Connect the client to the server	(optional starting in v4.7)
