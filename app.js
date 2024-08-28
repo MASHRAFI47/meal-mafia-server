@@ -59,15 +59,24 @@ async function run() {
             res.send(result)
         })
 
+        //meals collection
         app.get("/meals", async (req, res) => {
             const result = await mealsCollection.find().toArray();
             res.send(result);
         })
 
-        app.get("/meals/:id", async(req,res) => {
+        //get one meal
+        app.get("/meals/:id", async (req, res) => {
             const id = req.params.id;
-            const query = {_id: new ObjectId(id)};
+            const query = { _id: new ObjectId(id) };
             const result = await mealsCollection.findOne(query);
+            res.send(result);
+        })
+
+        //post a meal
+        app.post("/meals", async (req, res) => {
+            const meal = req.body;
+            const result = await mealsCollection.insertOne(meal);
             res.send(result);
         })
 
