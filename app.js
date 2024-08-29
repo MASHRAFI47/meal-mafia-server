@@ -73,6 +73,9 @@ async function run() {
         const usersCollection = client.db("meal-mafia").collection("users");
         const mealsCollection = client.db("meal-mafia").collection("meals");
 
+        // Connect the client to the server	(optional starting in v4.7)
+        // await client.connect();
+
 
         //save a user in database
         app.put("/user", async (req, res) => {
@@ -168,8 +171,7 @@ async function run() {
                 .send({ success: true })
         })
 
-        // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
