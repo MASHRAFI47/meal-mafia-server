@@ -182,5 +182,9 @@ async function run() {
 }
 run().catch(console.dir);
 
+app.get('/', async (req, res) => {
+    res.send("Find Peek server is running");
+})
+
 
 module.exports = app;
