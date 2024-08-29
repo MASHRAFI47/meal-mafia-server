@@ -86,6 +86,21 @@ async function run() {
             res.send(result);
         })
 
+        //make an user admin
+        app.patch("/user/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const userRole = req.body;
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    ...userRole
+                }
+            }
+            const result = await usersCollection.updateOne(query, updateDoc, options)
+            res.send(result);
+        })
+
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
         // Send a ping to confirm a successful connection
