@@ -5,11 +5,56 @@ require('dotenv').config();
 
 //cors
 const cors = require("cors");
-app.use(cors())
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
+
+const corsOptions = {
+    origin: ['http://localhost:5173', 'http://localhost:5174', 'https://meal-lounge.web.app'],
+    credentials: true,
+    optionsSuccessStatus: 200
+}
+app.use(cors(corsOptions))
 
 //expressjson
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+
+//cookie
+app.use(cookieParser());
+
+
+//middlewares
+const verifyToken = (req, res, next) => {
+    const token = req.cookies?.token;
+    if (!token) {
+        return res.status(401).send({ message: "Unauthorized User" })
+    }
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+        if (err) {
+            console.log(err)
+            return res.status(401).send({ message: "Unauthorized Access" })
+        }
+        req.user = decoded;
+
+        next()
+    })
+}
+
+
+//verify admin middleware
+const verifyAdmin = async (req, res, next) => {
+    const user = req.user;
+    const query = { email: user?.email };
+    const result = await usersCollection.findOne(query)
+    if (!result || result?.role !== 'admin') {
+        return res.status(401).send({ message: "Unauthorized Access" })
+    }
+
+    next();
+}
+
+
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.iduz7rm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
