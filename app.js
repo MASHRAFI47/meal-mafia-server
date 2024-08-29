@@ -159,6 +159,15 @@ async function run() {
             }).send({ success: true })
         })
 
+        //logout
+        app.post('/logout', async (req, res) => {
+            const user = req.body;
+            console.log('logging out', user);
+            res
+                .clearCookie('token', { maxAge: 0, sameSite: 'none', secure: true })
+                .send({ success: true })
+        })
+
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
         // Send a ping to confirm a successful connection
