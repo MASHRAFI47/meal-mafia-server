@@ -139,6 +139,21 @@ async function run() {
             res.send(result);
         })
 
+        app.put("/meals/:id", async(req, res) => {
+            const meals = req.body;
+            const id = req.params.id;
+            const query = {_id: new ObjectId(id)};
+            
+            const updateDoc = {
+                $set: {
+                    ...meals
+                }
+            }
+            
+            const result = await mealsCollection.updateOne(query, updateDoc);
+            res.send(result);
+        })
+
         //delete a meal
         app.delete("/meal/:id", async (req, res) => {
             const id = req.params.id;
