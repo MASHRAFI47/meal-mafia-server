@@ -109,7 +109,18 @@ async function run() {
 
         //meals collection
         app.get("/meals", async (req, res) => {
-            const result = await mealsCollection.find().toArray();
+            const sort = req.query.sort;
+            console.log(sort)
+
+            let query = {};
+
+            const options = {
+                sort: {
+                    price: sort === 'asc' ? 1 : -1,
+                }
+            }
+
+            const result = await mealsCollection.find(query, options).toArray();
             res.send(result);
         })
 
