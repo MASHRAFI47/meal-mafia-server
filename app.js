@@ -125,7 +125,7 @@ async function run() {
         })
 
         //get one meal
-        app.get("/meals/:id", async (req, res) => {
+        app.get("/meal/:id", async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
             const result = await mealsCollection.findOne(query);
