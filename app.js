@@ -139,17 +139,17 @@ async function run() {
             res.send(result);
         })
 
-        app.put("/meals/:id", async(req, res) => {
+        app.put("/meals/:id", async (req, res) => {
             const meals = req.body;
             const id = req.params.id;
-            const query = {_id: new ObjectId(id)};
-            
+            const query = { _id: new ObjectId(id) };
+
             const updateDoc = {
                 $set: {
                     ...meals
                 }
             }
-            
+
             const result = await mealsCollection.updateOne(query, updateDoc);
             res.send(result);
         })
@@ -210,6 +210,15 @@ async function run() {
             res
                 .clearCookie('token', { maxAge: 0, sameSite: 'none', secure: true })
                 .send({ success: true })
+        })
+
+
+        //get meals using email
+        app.get("/my-meals/:email", async (req, res) => {
+            const email = req.params.email;
+            const query = { 'adminEmail': email };
+            const result = await mealsCollection.find(query).toArray();
+            res.send(result);
         })
 
 
